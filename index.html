@@ -1,0 +1,95 @@
+
+<!-- 
+    Visit DOMAlgebra.com for more information about Nametag.
+
+    Nametag Basic, Copyright James Robey c2012-2013, jrobey.services@gmail.com
+    
+    THIS LIBRARY IS PROVIDED UNDER THE TERMS OF THE LGPL3 (the Lesser General Public License Version 3)
+    SEE THE TERMS OF THE LICENSE AT http://www.gnu.org/licenses/lgpl-3.0.txt
+    
+    This is Nametag Basic, and represents the core of the Nametag Runtime.
+    If you want to use extended features developed for TagOS in your own projects
+    like universally unique compiled programs, big lists, lazy lists, windowed UI, 
+    file-systems, encryption/identity, and more visit DOMAlgebra.com where you
+    can learn about the extended versions of the Nametag Runtime.
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html>
+    <head>
+        <title>DOM Algebra's Nametag Basic</title>
+        
+        <!-- Nametag relies on JQuery version 2.0, running anywhere it does. -->
+        <script src="src/jquery-2.0.0.min.js" type="text/javascript"></script>
+        <!-- Nametag relies on a modifed JQuery Templates  -->
+        <script src="src/jquery-tmpl-nametag.js" type="text/javascript"></script>
+        <!-- JSHINT provides pre-compilation error checking. -->
+        <script src="src/JSHint.js" type="text/javascript"></script>
+        
+        <!-- the Nametag Basic source code, the core of the runtime -->
+        <script src="src/NametagBasic.js" type="text/javascript"></script>
+        
+        <!-- includes basic css "verbs" routinely used in nametag design; verbs provide css layout consistency and shorthand -->
+        <link href="src/Nametag.css" media="all" rel="stylesheet" type="text/css"></link>
+        
+        <!-- these are conveniences for writing more Nametag concise code -->
+        <script id="root" type="text/nametag"></script>
+        <script id="text" type="text/nametag" tagtype="span"></script>
+
+        <!-- The basis of hitches; applying this to the Environment allow subviews to hitch to the size of the window -->
+        <script id="SizedToWindow" type="text/nametag">
+            __init__:function(){
+                $(window).bind("resize", self.resizeFunction);
+                self.resizeFunction();
+            },
+
+            resizeFunction:function(){
+                self.set('width', window.innerWidth);
+                self.set('height', window.innerHeight);
+            }
+        </script>   
+
+        <!-- boilerplate, this nametag prepares our "app" nametag to run normally. -->
+        <script id="Environment" type="text/nametag">
+            $SizedToWindow:true
+
+            <main width="%%{self.parent.width}" height="%%{self.parent.height}">
+                __load__:function(){
+                    Nametag.GUI.focus.setLayer(self);
+                    Nametag.GUI.focus.setWindow(self);
+                }
+            </main>
+        </script>
+    </head>
+
+    <!-- Entirety of the required HTML to start a Nametag application. -->
+    <body>
+        <div class="nametag fixed width100" script="Environment"></div>
+    </body>
+    
+    <!-- 
+        YOUR APP HERE ("main" nametag is invoked in the environment by convention) 
+        The first line as a comment with "dialect shml" is special, and tells the 
+        system to apply SHML formatting to your code. 
+    -->
+    <script id="main" type="text/nametag">
+        <!-- dialect shml -->
+        
+        <div class="centered bold bigger padded lightBlueGradient">
+            Welcome to Nametag. Visit <a target="_blank" href="http:\/\/domalgebra.com">DOMAlgebra.com</a> to learn more
+        
+        <view class="scrollable lightMetalGradient center shadowed" 
+              width="%%{self.parent.width}" 
+              height="%%{self.parent.height;;value-self.offsetTop}">
+              
+            list:range(20),
+            selectable:"yellow, blue",
+            keyselectable:true,
+            autoscrollable:true
+        
+            <div>
+                [=item=]
+    </script>
+</html>
+
